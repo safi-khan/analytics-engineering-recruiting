@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: stg__returns.yml
+    description: '{{ doc("stg__returns") }}'
+    columns:
+      - name: return_id
+        tests:
+            - unique
+            - not_null
+
+      - name: return_created_at
+      - name: destination_id
+      - name: item_count
+      - name: is_gift_return
+      - name: is_in_store_return
+      - name: order_id
+      - name: provider_id
+      - name: return_policy
+      - name: return_processed_at
+      - name: return_state
+      - name: shop_id
+      - name: refund_value_usd
+      - name: exchange_value_usd
+      - name: return_price_usd
+      - name: total_shop_currency

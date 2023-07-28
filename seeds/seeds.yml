@@ -1,0 +1,11 @@
+version: 2
+
+seeds:
+  - name: merchants
+    description: "To-Do"
+
+  - name: orders
+    description: '{{ doc("stg__orders") }}'
+
+  - name: returns
+    description: '{{ doc("stg__returns") }}'
