@@ -1,15 +1,14 @@
 version: 2
 
 models:
-  - name: stg__merchants.yml
+  - name: stg__merchants
     description: "Staging model for merchants.csv."
     columns:
-      - name: order_id
+      - name: shop_id
         description: ""
         tests:
           - unique
           - not_null
-
       - name: merchant_created_at
       - name: merchant_currency
       - name: is_portal_active

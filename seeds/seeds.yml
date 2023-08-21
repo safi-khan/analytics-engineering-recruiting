@@ -2,7 +2,7 @@ version: 2
 
 seeds:
   - name: merchants
-    description: "To-Do"
+    description: '{{ doc("stg__merchants") }}'
 
   - name: orders
     description: '{{ doc("stg__orders") }}'

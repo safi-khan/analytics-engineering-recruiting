@@ -1,21 +1,20 @@
 version: 2
 
 models:
-  name: stg__orders.yml
-  description: '{{ doc("stg__orders") }}'
-  columns:
-    name: order_id
-      tests:
-        unique
-        not_null
-
-    name: provider_id
-    name: order_created_at
-    name: fulfillment_status
-    name: line_item_count
-    name: order_processed_at
-    name: processing_method
-    name: shop_id
-    name: source_name
-    name: sales_channel
-    name: gross_merchandise_value_usd
+  - name: stg__orders
+    description: '{{ doc("stg__orders") }}'
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: provider_id
+      - name: order_created_at
+      - name: fulfillment_status
+      - name: line_item_count
+      - name: order_processed_at
+      - name: processing_method
+      - name: shop_id
+      - name: source_name
+      - name: sales_channel
+      - name: gross_merchandise_value_usd

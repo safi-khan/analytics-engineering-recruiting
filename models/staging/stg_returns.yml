@@ -1,14 +1,13 @@
 version: 2
 
 models:
-  - name: stg__returns.yml
+  - name: stg__returns
     description: '{{ doc("stg__returns") }}'
     columns:
       - name: return_id
         tests:
             - unique
             - not_null
-
       - name: return_created_at
       - name: destination_id
       - name: item_count
