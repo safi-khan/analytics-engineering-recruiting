@@ -1,6 +1,8 @@
-with
-    return_policy as (
-        {%- set return_policy_query -%}
+
+--creates a set of keys to go over  in the for loop. Only addresses first level of keys and leaves some columns in the json format.
+WITH return_policy AS (
+
+    {%- set return_policy_query -%}
     CREATE TEMP FUNCTION jsonObjectKeys(input STRING)
     RETURNS Array<String>
     LANGUAGE js AS """
@@ -20,13 +22,15 @@ with
         {%- endset -%}
 
         {%- set results = run_query(return_policy_query) -%}
-        {%- if execute -%} {%- set results_list = results.columns[0].values() -%}
+        {%- if execute -%} 
+        {%- set results_list = results.columns[0].values() -%}
         {%- else -%} {%- set results_list = [] -%}
         {%- endif -%}
 
         select
             return_id,
             order_id,
+            -- for loop using jinja template to keep the code clean.
             {% for key in results_list -%}
                 trim(json_query(return_policy, '$.{{ key }}'), '"') as rp_{{ key }},
             {% endfor -%}
@@ -36,10 +40,10 @@ with
     ),
 
 shop_return_policy AS (
-
+-- Assuming shop's return policy stays consistent. There are some exceptions hence we are taking the values from the latest order
     SELECT 
         CAST(rp_shop_id AS INT) AS shop_id,
-        -- This could be done with jinja for loop!!!
+        -- This could also be done with jinja for loop if the list continues to grow!!!
         ARRAY_AGG(rp_instant_exchange_enabled ORDER BY rp_created_at DESC LIMIT 1)[OFFSET(0)] AS instant_exchange_enabled,
         ARRAY_AGG(rp_gift_cards_enabled ORDER BY rp_created_at DESC LIMIT 1)[OFFSET(0)] AS gift_cards_enabled,
         ARRAY_AGG(rp_shop_later_gift_card_enabled ORDER BY rp_created_at DESC LIMIT 1)[OFFSET(0)] AS shop_later_gift_card_enabled,
@@ -50,7 +54,6 @@ shop_return_policy AS (
         ARRAY_AGG(rp_persistent_credit_enabled ORDER BY rp_created_at DESC LIMIT 1)[OFFSET(0)] AS persistent_credit_enabled,
         ARRAY_AGG(rp_persistent_credit_exchanges_enabled ORDER BY rp_created_at DESC LIMIT 1)[OFFSET(0)] AS persistent_credit_exchanges_enabled
     FROM return_policy
-    WHERE rp_persistent_credit_enabled IS NOT NULL --AND rp_keep_item_threshold IN ('true', 'false')
     GROUP BY 1
     )
 
@@ -72,6 +75,7 @@ SELECT
     refunds_enabled,
     keep_item_enabled,
     keep_item_threshold,
+    -- keep_item_threshold and keep_item_enabled are in contradiction for some merchants so creating my logic to provide a little flexibility downstream
     CASE WHEN keep_item_threshold != '0' OR keep_item_threshold IS NOT NULL THEN TRUE ELSE FALSE END AS has_keep_item_threshold,
     -- ASSUMING persistent credit enabled means true in any form (since its all false for persistent_credit_enabled)
     -- Logic below assumes null is false
