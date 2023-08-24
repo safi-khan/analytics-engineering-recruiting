@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: mart__orders_return_policy
+    description: "A model at order grain with merchant's return_policy and order specific return details"
+    columns:
+      - name: order_id
+        description: "Primary Key and unique identifier for each order"
+        tests:
+          - unique
+          - not_null
+      - name: order_created_at
+      - name: order_processed_at
+      - name: line_item_count
+      - name: return_item_count
+      - name: return_id
+      - name: return_processed_at
+      - name: shop_id
+      - name: gmv_usd
+      - name: merchant_product_category
+      - name: instant_exchange_enabled
+      - name: gift_cards_enabled
+      - name: shop_later_gift_card_enabled
+      - name: refunds_enabled
+      - name: keep_item_enabled
+      - name: keep_item_threshold
+      - name: has_keep_item_threshold
+      - name: persistent_credit_gift_card_enabled
+      - name: persistent_credit_enabled
+      - name: persistent_credit_exchanges_enabled
